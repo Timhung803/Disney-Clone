@@ -17,15 +17,13 @@ function Header() {
   const userPhoto = useSelector(selectUserPhoto);
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        dispatch(
-          setUserLogin({
+    auth.onAuthStateChanged(async (user)=>{
+      if(user){
+        dispatch(setUserLogin({
             name: user.displayName,
             email: user.email,
             photo: user.photoURL,
-          })
-        );
+          }))
         history.push("/");
       }
     });
@@ -59,7 +57,7 @@ function Header() {
         <LoginContainer>
           <Login onClick={signIn}>Login</Login>
         </LoginContainer>
-      ) : (
+      ) :
         <>
           <NavMenu>
             <a>
@@ -89,7 +87,7 @@ function Header() {
           </NavMenu>
           <UserImg onClick={signOut} src="/images/favicon.svg" />
         </>
-      )}
+      }
     </Nav>
   );
 }
