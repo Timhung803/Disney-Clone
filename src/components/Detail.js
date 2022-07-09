@@ -1,14 +1,38 @@
-import React from 'react' 
+import React, { useEffect, useState } from 'react' 
 import styled from 'styled-components'
+import { useParams } from "react-router-dom"
+import db from '../firebase';
 
 function Detail() {
+  const { id } = useParams();
+  const [ movie, setMovie ] = useState();
+
+  useEffect(() => {
+    //Grab the movie infomation from DB
+    db.collection("movies")
+    .doc(id)
+    .get()
+    .then((doc) => {
+        if(doc.exists){
+            //save the movie data
+            setMovie(doc.data());
+        } else {
+            //redirect to home page
+            
+        }
+    })
+  }, [])
+
+
   return (
     <Container>
+        {movie && (
+        <>        
         <Background>
-            <img src='/images/slider-badag.jpg' />
+            <img src={movie.backgroundImg} />
         </Background>
         <ImageTitle>
-            <img src="/images/movie-icon.svg" />
+            <img src={movie.titleImg} />
         </ImageTitle>
         <Controls>
             <PlayButton>
@@ -27,11 +51,13 @@ function Detail() {
             </GroupWatchButton>
         </Controls>
         <SubTitle>
-            2018 how are you?
+            {movie.subTitle}
         </SubTitle>
         <Description>
-            Hello, hello, hello, hello!
+            {movie.description}
         </Description>
+        </>
+        )}
     </Container>
   )
 }
@@ -133,7 +159,7 @@ const SubTitle = styled.div`
 const Description = styled.div`
     line-height: 1.4;
     font-size: 20px;
-    margin-top: 16px
+    margin-top: 16px;
     color: rgb(249, 249, 249);
     max-width: 760px;
 `
